@@ -1,40 +1,83 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+void imprimirMar(int valor, int repeticoes) {
+    for(int i = 0; i < repeticoes; i++) {
+        printf("%d  ", valor);
+    }
+}
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    char colunas[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'}; // Colunas
+    int linhas[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};                      // Linhas
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    // Navio horizontal
+    int navioLinha = 3;        // Linha do navio horizontal
+    int navioColunaInicio = 4; // Coluna inicial
+    int navioTamanho = 3;      // Comprimento
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    // Navio vertical
+    int navioColunaV = 8;      // Coluna H (posição 8)
+    int navioLinhaInicioV = 6; // Linha Inicial
+    int navioTamanhoV = 3;     // Comprimneto vartical
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+    // Validação do navio horizontal
+    if(navioLinha < 1 || navioLinha > 10 ||
+       navioColunaInicio < 1 || navioColunaInicio > 10 ||
+       navioColunaInicio + navioTamanho - 1 > 10) {
+        printf("Erro: navio horizontal fora dos limites!\n");
+        return 1;
+    }
 
-    return 0;
+    // Validação do navio vertical
+    if(navioColunaV < 1 || navioColunaV > 10 ||
+       navioLinhaInicioV < 1 || navioLinhaInicioV > 10 ||
+       navioLinhaInicioV + navioTamanhoV - 1 > 10) {
+        printf("Erro: navio vertical fora dos limites!\n");
+        return 1;
+    }
+
+    // Cabeçalho do tabuleiro (colunas)
+    for(int i = 0; i < 10; i++) { // Imprime os caracteres das colunas e posiciona o 'A' em cima da primerira coluna
+        if(i == 0) {
+            printf("   %c  ", colunas[i]); // caso seja o 'A' ele imprime com 3 espaços
+        } else {
+            printf("%c  ", colunas[i]); // imprime os restantes dos caracteres restante sem espço
+        }
+    }
+
+    printf("\n"); // Quebra a linha quando ela finaliza(linha das colunas)
+
+    // Construindo as linhas
+    for(int i = 0; i < 10; i++) { // repete 10 vezes formando um tabuleiro 10X10
+
+        if(linhas[i] == 10) { // imprime o numero referente a linha, se não for o 10 ele adiciona um espaço, para que um numero fique um em baixo do outro
+            printf("%d ", linhas[i]);
+        } else {
+            printf(" %d ", linhas[i]); // adiciona o espaço se não for o 10
+        }
+
+        // Percorre as 10 colunas
+        for(int j = 1; j <= 10; j++) {
+            int valor = 0; // Valor padrão para se referir a água
+
+            // Navio horizontal
+            if(linhas[i] == navioLinha &&
+               j >= navioColunaInicio &&
+               j < navioColunaInicio + navioTamanho) {
+                valor = 3;
+            }
+
+            // Navio vertical
+            if(j == navioColunaV &&
+               linhas[i] >= navioLinhaInicioV &&
+               linhas[i] < navioLinhaInicioV + navioTamanhoV) {
+                valor = 3;
+            }
+
+            printf("%d  ", valor);
+        }
+
+        printf("\n"); // quebra a linha quando ela finaliza(linha dos 0)
+    }
 }
