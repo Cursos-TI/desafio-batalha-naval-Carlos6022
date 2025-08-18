@@ -1,12 +1,67 @@
 #include <stdio.h>
+// Função para criar a cruz
+void criarCruz(int cruz[5][5]) {
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            if(i == 1 || j == 1) {
+                cruz[i][j] = 1;
+            } else {
+                cruz[i][j] = 0;
+            }
+        }
+    }
+}
 
-void imprimirMar(int valor, int repeticoes) {
-    for(int i = 0; i < repeticoes; i++) {
-        printf("%d  ", valor);
+// Função para criar o octaedro
+void criarOctaedro(int octaedro[5][5]) {
+    for(int i = 0; i < 5; i++) {
+        for(int j = 0; j < 5; j++) {
+            if((j >= 2 - i && j <= 2 + i) && i <= 2) {
+                octaedro[i][j] = 1; // Parte superior do octaedro
+            } else if(i >= 3 && j >= i - 2 && j <= 6 - i) {
+                octaedro[i][j] = 1; // Parte inferior do octaedro
+            } else {
+                octaedro[i][j] = 0;
+            }
+        }
+    }
+}
+
+// Função para criar o cone
+void criarCone(int cone[5][5]) {
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 5; j++) {
+            if((i + j >= 2 && i + j <= 6) && (i - j >= -2 && i - j <= 2)) {
+                cone[i][j] = 1;
+            } else {
+                cone[i][j] = 0;
+            }
+        }
+    }
+}
+
+//Funçao responsavel por aplicar as formas no tabuleiro e verificar os limites
+void aplicarHabilidade(int tabuleiro[10][10], int habilidade[5][5], int centroLinha, int centroColuna) {
+    int inicioLinha = centroLinha - 2;   // Cálculo da Posição Inicial
+    int inicioColuna = centroColuna - 2; // Cálculo da Posição Inicial
+
+    for(int i = 0; i < 5; i++) {
+        for(int j = 0; j < 5; j++) {
+            int tabuleiroLinha = inicioLinha + i;
+            int tabuleiroColuna = inicioColuna + j;
+
+            if(tabuleiroLinha >= 0 && tabuleiroLinha < 10 &&
+               tabuleiroColuna >= 0 && tabuleiroColuna < 10) {
+                if(habilidade[i][j] == 1) {
+                    tabuleiro[tabuleiroLinha][tabuleiroColuna] = 5;
+                }
+            }
+        }
     }
 }
 
 int main() {
+
     int tabuleiro[10][10];                                                 // Tabuleiro 10x10
     char colunas[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'}; // Colunas
     int linhas[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};                      // Linhas
@@ -17,7 +72,7 @@ int main() {
     int navioTamanho = 3;      // Comprimento
 
     // Navio vertical
-    int navioColunaV = 8;      // Coluna H (posição 8)
+    int navioColunaV = 1;      // Coluna H (posição 8)
     int navioLinhaInicioV = 6; // Linha Inicial
     int navioTamanhoV = 3;     // Comprimneto vartical
 
@@ -111,6 +166,17 @@ int main() {
         }
         tabuleiro[linha][coluna] = 3;
     }
+    // Cria matrizes de habilidades
+    int cone[5][5], cruz[5][5], octaedro[5][5];
+
+    criarCone(cone); 
+    criarCruz(cruz);
+    criarOctaedro(octaedro);
+
+    // Aplica habilidades ao tabuleiro
+    aplicarHabilidade(tabuleiro, octaedro, 3, 7);
+    aplicarHabilidade(tabuleiro, cruz, 2, 2);
+    aplicarHabilidade(tabuleiro, cone, 8, 6);
 
     // Cabeçalho do tabuleiro (colunas)
     for(int i = 0; i < 10; i++) { // Imprime os caracteres das colunas e posiciona o 'A' em cima da primerira coluna
@@ -136,6 +202,4 @@ int main() {
         }
         printf("\n"); // quebra a linha quando ela finaliza(linha dos 0)
     }
-
-    return 0;
 }
